@@ -7,6 +7,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
 import org.bukkitcontrib.event.inventory.InventoryCloseEvent;
 import org.bukkitcontrib.event.inventory.InventoryListener;
+import org.bukkitcontrib.event.inventory.InventoryOpenEvent;
 
 public class MyPropertyInventoryListener extends InventoryListener{
 	MyProperty plugin;
@@ -17,11 +18,22 @@ public class MyPropertyInventoryListener extends InventoryListener{
 	}
 	
 	@Override
+	public void onInventoryOpen(InventoryOpenEvent event)
+	{
+		if(!plugin.isChestMyPropertyChest(event.getLocation().getBlock()).equals(event.getPlayer().getName())){
+			// Do not allow this player to open another players MyProperty container!
+			event.getPlayer().sendMessage("This is not your property!");
+			event.setCancelled(true);
+		}
+	}
+	
+	@Override
 	public void onInventoryClose(InventoryCloseEvent event)
 	{
 		Block wallSign;
 		Block chest = event.getLocation().getBlock();
 		int x, y, z;
+		int protectionSize = 0;
 		
 		x = chest.getX();
 		y = chest.getY();
@@ -67,11 +79,15 @@ public class MyPropertyInventoryListener extends InventoryListener{
 						amount = amount + itemStack.getAmount();
 					}
 				}
-				System.out.print("Found " + amount + " golden apples in container.");
 				
-				int protectionSize = 12 + (amount * ((amount/4)+1));
-				sign.setLine(2, "Level " + amount);
-				sign.setLine(3, "Size: " + protectionSize + " CuBlocks");
+				if(amount > 0){
+					protectionSize = 12 + (amount * ((amount/4)+1));
+					sign.setLine(2, "Level " + amount);
+					sign.setLine(3, "Size: " + protectionSize);
+				} else {
+					sign.setLine(2, "Level 0");
+					sign.setLine(3, "Size: 0");
+				}
 				sign.update();
 			}
 		}
