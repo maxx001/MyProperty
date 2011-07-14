@@ -22,7 +22,7 @@ public class MyPropertyInventoryListener extends InventoryListener{
 	{
 		if(!plugin.isChestMyPropertyChest(event.getLocation().getBlock()).equals(event.getPlayer().getName())){
 			// Do not allow this player to open another players MyProperty container!
-			event.getPlayer().sendMessage("This is not your property!");
+			event.getPlayer().sendMessage("Denne grundkiste tilhører ikke dig");
 			event.setCancelled(true);
 		}
 	}
@@ -34,23 +34,22 @@ public class MyPropertyInventoryListener extends InventoryListener{
 		Block chest = event.getLocation().getBlock();
 		int x, y, z;
 		int protectionSize = 0;
+		String worldName = event.getPlayer().getWorld().getName();
 		
 		x = chest.getX();
 		y = chest.getY();
 		z = chest.getZ();
 		
-		System.out.print("Block type for inventory: " + chest.getTypeId());
-		
 		if(chest.getTypeId() == 54){
 			// The inventory belongs to a chest. We need to check if
 			// it has a sign that says [Property] in the first line
-			wallSign = plugin.getServer().getWorld("world").getBlockAt(x+1, y, z);
+			wallSign = plugin.getServer().getWorld(worldName).getBlockAt(x+1, y, z);
 			if(wallSign.getTypeId() != 68){
-				wallSign = plugin.getServer().getWorld("world").getBlockAt(x-1, y, z);
+				wallSign = plugin.getServer().getWorld(worldName).getBlockAt(x-1, y, z);
 				if(wallSign.getTypeId() != 68){
-					wallSign = plugin.getServer().getWorld("world").getBlockAt(x, y, z+1);
+					wallSign = plugin.getServer().getWorld(worldName).getBlockAt(x, y, z+1);
 					if(wallSign.getTypeId() != 68){
-						wallSign = plugin.getServer().getWorld("world").getBlockAt(x, y, z-1);
+						wallSign = plugin.getServer().getWorld(worldName).getBlockAt(x, y, z-1);
 						if(wallSign.getTypeId() != 68){
 							// Sign was not placed beside a chest at all so just exit
 							// the event.
@@ -61,12 +60,10 @@ public class MyPropertyInventoryListener extends InventoryListener{
 			}
 			
 			// If get to this point, we have found a wall sign!
-			System.out.print("Wall Sign found!");
 			Sign sign = (Sign)wallSign.getState();
 			
-			if(sign.getLine(0).equals("[Property]")){
+			if(sign.getLine(0).equalsIgnoreCase("[Grund]")){
 				// Sign is a MyProperty sign
-				System.out.print("The sign is recognized as a MyProperty sign!");
 				
 				// Ok now that we know that this chest is a MyProperty chest we
 				// can check how many MyProperty enabled items it contains...
@@ -81,14 +78,33 @@ public class MyPropertyInventoryListener extends InventoryListener{
 				}
 				
 				if(amount > 0){
-					protectionSize = 12 + (amount * ((amount/4)+1));
+					protectionSize = plugin.minSize + ((amount * plugin.multiplier) + 1);
+					if(protectionSize % 2 == 0) protectionSize = protectionSize + 1;
 					sign.setLine(2, "Level " + amount);
-					sign.setLine(3, "Size: " + protectionSize);
+					sign.setLine(3, "Areal: " + protectionSize);
 				} else {
+					protectionSize = 0;
 					sign.setLine(2, "Level 0");
-					sign.setLine(3, "Size: 0");
+					sign.setLine(3, "Areal: 0");
 				}
 				sign.update();
+				
+				for(PropertyClass ps : plugin.properties)
+				{
+					if(ps.Owner.equals(event.getPlayer().getName()) && ps.World.equals(worldName)){
+						if(x == ps.ChestLocation.getBlockX() 
+								&& y == ps.ChestLocation.getBlockY() 
+								&& z == ps.ChestLocation.getBlockZ()){
+							// Found the correct chest
+							ps.Size = protectionSize;
+							ps.Level = amount;
+							
+							break;
+						}
+					}
+				}
+				// Save change to disk
+				plugin.Save();
 			}
 		}
 	}
