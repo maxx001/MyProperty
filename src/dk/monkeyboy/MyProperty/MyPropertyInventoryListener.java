@@ -1,6 +1,7 @@
 package dk.monkeyboy.MyProperty;
 
 import java.util.HashMap;
+
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -20,16 +21,26 @@ public class MyPropertyInventoryListener extends InventoryListener{
 	@Override
 	public void onInventoryOpen(InventoryOpenEvent event)
 	{
-		if(!plugin.isChestMyPropertyChest(event.getLocation().getBlock()).equals(event.getPlayer().getName())){
-			// Do not allow this player to open another players MyProperty container!
-			event.getPlayer().sendMessage("Denne grundkiste tilhører ikke dig");
-			event.setCancelled(true);
+		// Exit event if player inventory was opened
+		if(event.getLocation() == null) return;
+		
+		String chestOwner = plugin.isChestMyPropertyChest(event.getLocation().getBlock());
+		
+		if(chestOwner != null){
+			if(!chestOwner.equals(event.getPlayer().getName())){
+				// Do not allow this player to open another players MyProperty container!
+				event.getPlayer().sendMessage("Denne grundkiste tilhører ikke dig");
+				event.setCancelled(true);
+			}
 		}
 	}
 	
 	@Override
 	public void onInventoryClose(InventoryCloseEvent event)
 	{
+		// Exit event if player inventory was opened
+		if(event.getLocation() == null) return;
+		
 		Block wallSign;
 		Block chest = event.getLocation().getBlock();
 		int x, y, z;

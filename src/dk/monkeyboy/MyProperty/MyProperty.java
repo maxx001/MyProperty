@@ -32,13 +32,15 @@ public class MyProperty extends JavaPlugin {
 	public void onEnable() {
 		// TODO Auto-generated method stub
 		MyPropertyBlockListener myPropertyBlockListener = new MyPropertyBlockListener(this);
+		MyPropertyEntityListener myPropertyEntityListener = new MyPropertyEntityListener(this);
 		
 		PluginManager pm = getServer().getPluginManager();
 		pm.registerEvent(Event.Type.SIGN_CHANGE, myPropertyBlockListener, Priority.Lowest, this);
 		pm.registerEvent(Event.Type.BLOCK_BREAK, myPropertyBlockListener, Priority.Lowest, this);
 		pm.registerEvent(Event.Type.BLOCK_PLACE, myPropertyBlockListener, Priority.Lowest, this);
 		pm.registerEvent(Event.Type.PLAYER_MOVE, new MyPropertyPlayerListener(this), Priority.Lowest, this);
-		pm.registerEvent(Event.Type.ENTITY_EXPLODE, new MyPropertyEntityListener(this), Priority.Lowest, this);
+		pm.registerEvent(Event.Type.ENTITY_EXPLODE, myPropertyEntityListener, Priority.Lowest, this);
+		pm.registerEvent(Event.Type.ENTITY_DAMAGE, myPropertyEntityListener, Priority.Lowest, this);
 		
 		if(pm.getPlugin("BukkitContrib") != null){
 			pm.registerEvent(Event.Type.CUSTOM_EVENT, new MyPropertyInventoryListener(this), Priority.Lowest, this);
