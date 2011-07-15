@@ -78,7 +78,7 @@ public class MyPropertyInventoryListener extends InventoryListener{
 				}
 				
 				if(amount > 0){
-					protectionSize = plugin.minSize + ((amount * plugin.multiplier) + 1);
+					protectionSize = plugin.minSize + (amount * plugin.multiplier);
 					if(protectionSize % 2 == 0) protectionSize = protectionSize + 1;
 					sign.setLine(2, "Level " + amount);
 					sign.setLine(3, "Areal: " + protectionSize);

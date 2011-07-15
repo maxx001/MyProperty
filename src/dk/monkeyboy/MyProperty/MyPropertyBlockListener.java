@@ -45,7 +45,7 @@ public class MyPropertyBlockListener extends BlockListener {
 			// We need to check if the player is allowed to break blocks here
 			for(PropertyClass p : plugin.properties)
 			{
-				if(p.isPlayerInsideArea(event.getPlayer())){
+				if(p.isLocationInsideArea(event.getPlayer().getLocation())){
 					if(!event.getPlayer().getName().equals(p.Owner)){
 						event.getPlayer().sendMessage("Du har ikke tilladelse til at ændre på " + p.Owner + "'s grund");
 						event.setCancelled(true);
@@ -63,7 +63,7 @@ public class MyPropertyBlockListener extends BlockListener {
 		// We need to check if the player is allowed to build blocks here
 		for(PropertyClass p : plugin.properties)
 		{
-			if(p.isPlayerInsideArea(event.getPlayer())){
+			if(p.isLocationInsideArea(event.getPlayer().getLocation())){
 				if(!event.getPlayer().getName().equals(p.Owner)){
 					event.getPlayer().sendMessage("Du har ikke tilladelse til at bygge på " + p.Owner + "'s grund");
 					event.setCancelled(true);
