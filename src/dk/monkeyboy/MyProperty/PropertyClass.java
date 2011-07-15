@@ -13,17 +13,17 @@ public class PropertyClass {
 	public int Size;
 	public String World;
 	
-	public boolean isPlayerInsideArea(Player player)
+	public boolean isLocationInsideArea(Location location)
 	{
 		int px, pz;
 		int x1, x2, z1, z2;
 		
 		if(Level == 0 || Size == 0) return false;
 		
-		if(!player.getWorld().getName().equals(World)) return false;
+		if(!location.getWorld().getName().equals(World)) return false;
 		
-		px = player.getLocation().getBlockX();
-		pz = player.getLocation().getBlockZ();
+		px = location.getBlockX();
+		pz = location.getBlockZ();
 		
 		x1 = ChestLocation.getBlockX() - (Size / 2);
 		z1 = ChestLocation.getBlockZ() - (Size / 2);

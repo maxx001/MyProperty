@@ -20,7 +20,7 @@ public class MyPropertyPlayerListener extends PlayerListener {
 		
 		for(PropertyClass ps : plugin.properties)
 		{
-			if(ps.isPlayerInsideArea(player))
+			if(ps.isLocationInsideArea(player.getLocation()))
 			{
 				for(Player p : ps.Visitors)
 				{
