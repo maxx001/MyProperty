@@ -42,10 +42,10 @@ public class MyProperty extends JavaPlugin {
 		pm.registerEvent(Event.Type.ENTITY_EXPLODE, myPropertyEntityListener, Priority.Lowest, this);
 		pm.registerEvent(Event.Type.ENTITY_DAMAGE, myPropertyEntityListener, Priority.Lowest, this);
 		
-		if(pm.getPlugin("BukkitContrib") != null){
+		if(pm.getPlugin("Spout") != null){
 			pm.registerEvent(Event.Type.CUSTOM_EVENT, new MyPropertyInventoryListener(this), Priority.Lowest, this);
 		} else {
-			System.out.print("[MyProperty] Error - Could not find BukkitContrib!");
+			System.out.print("[MyProperty] Error - Could not find Spout API!");
 		}
 		
 		PluginDescriptionFile pdfFile = this.getDescription();

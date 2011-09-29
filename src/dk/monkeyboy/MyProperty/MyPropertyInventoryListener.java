@@ -6,9 +6,9 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.inventory.ItemStack;
-import org.bukkitcontrib.event.inventory.InventoryCloseEvent;
-import org.bukkitcontrib.event.inventory.InventoryListener;
-import org.bukkitcontrib.event.inventory.InventoryOpenEvent;
+import org.getspout.spoutapi.event.inventory.InventoryCloseEvent;
+import org.getspout.spoutapi.event.inventory.InventoryListener;
+import org.getspout.spoutapi.event.inventory.InventoryOpenEvent;
 
 public class MyPropertyInventoryListener extends InventoryListener{
 	MyProperty plugin;
